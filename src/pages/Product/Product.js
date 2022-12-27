@@ -1,8 +1,15 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const Product = ({search}) => {
+const Product = ({match}) => {
+  
+  console.log(match.params.id)
+
   return (
-    <div>Productos</div>
+    <>
+      <h1>Productos</h1>
+      <h2>Se solicita info del producto: {match.params.id}</h2>
+    </>
   )
 }
 

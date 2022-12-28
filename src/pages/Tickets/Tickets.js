@@ -14,7 +14,6 @@ const tickets = [
     precio: 800,
     cantidad: 0,
   },
-
 ]
 
 const Tickets = () => {

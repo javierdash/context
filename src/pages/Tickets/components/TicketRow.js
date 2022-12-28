@@ -1,16 +1,17 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 
-const TicketRow = (id, descripcion, precio, cantidad, addTicketQuantity, substractTicketQuantity) => {
+const TicketRow = ({id, descripcion, precio, cantidad, addTicketQuantity, substractTicketQuantity}) => {
+  
   return (
     <tr>
       <td>{descripcion}</td>
       <td className="text-center">
-        <button className="btn"> - </button>
+        <Button className="mr-3" onClick={substractTicketQuantity}> - </Button>
         <span>{cantidad}</span>
-        <button className="btn"> + </button>
+        <Button className="ml-3" onClick={() => addTicketQuantity(id)}> + </Button>
       </td>
       <td className="text-center">${precio}</td>
-
     </tr>
   )
 }

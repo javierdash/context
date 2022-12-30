@@ -1,5 +1,7 @@
 // setea una autenticación y el logout del usuario
 
+import {SET_AUTH, LOGOUT} from "../actions/auth"
+
 export const initialState = {
   isLoggedIn : false,
   jwt: null, // se envia en cada request HTTP (en la cabecera) + storage

@@ -17,11 +17,15 @@ export const AuthProvider = ({children}) => {
 
   const login = ({username, password}) => {
     //PETICION HHTTP axios.post el server responde un token
-    const {jwt} = {
-      ok: true,
-      jwt: "ejfjirttigjldghrtl"
+    if(username === "admin" && password === "12345") {
+      const {jwt} = {
+        jwt: "ejfjirttigjldghrtl"
+      }
+      setAuth({ jwt })
+      return jwt
+    } else {
+    return null;
     }
-    setAuth({ jwt })
   }
 
   const setAuth = ({ jwt }) => {
@@ -29,7 +33,7 @@ export const AuthProvider = ({children}) => {
   }
 
   return (
-    <Provider value={{ state, setAuth, logout, login }}>
+    <Provider value={{ setAuth, logout, login }}>
       {children}
     </Provider>
   )

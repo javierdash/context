@@ -2,11 +2,24 @@ import {useFormik} from "formik"
 import { initialValues, validationSchema } from "./schemas"
 import {Container, Grid, TextField, Button, Box} from "@material-ui/core"
 import * as Yup from "yup"
+import { useContext, useState } from "react"
+import {useHistory} from "react-router-dom"
+import { AuthContext } from "../../contexts/Auth"
 
 const Login = () => {
  
+  const history = useHistory()
+
+  const [wrongPassword, setWrongPassword] = useState(false)
+
+  const { login } = useContext(AuthContext)
+
   const handleLogin = ({username, password}) => {
     //llegado a este punto -> username y password estan validados con mi schema
+    const jwt = login({username, password})
+    if(!jwt) return setWrongPassword(true)
+    setWrongPassword(false)
+    history.push("/dashboard")
   }
 
   const formik = useFormik({
@@ -54,6 +67,7 @@ const Login = () => {
               </Button>
             </Box>
           </form>
+          {wrongPassword && <span>usuario y/o contraseña incorrectos</span> }
         </Grid>
       </Grid>
     </Container>

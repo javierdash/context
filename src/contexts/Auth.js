@@ -1,6 +1,7 @@
 import {createContext, useContext, useReducer} from "react"
 import { SET_AUTH, LOGOUT } from "../actions/auth"
 import { authReducer, initialState } from "../reducers/auth"
+import jwt_decode from "jwt-decode"
 
 //definiendo el contexto
 export const AuthContext = createContext()
@@ -13,6 +14,10 @@ export const AuthProvider = ({children}) => {
 
   const logout = () => {
     dispatch({ type: LOGOUT })
+  }
+
+  const getUserInformation = () => {
+    { name: jwt_decode(state.jwt.name)}
   }
 
   const login = ({username, password}) => {
@@ -33,7 +38,7 @@ export const AuthProvider = ({children}) => {
   }
 
   return (
-    <Provider value={{ setAuth, logout, login }}>
+    <Provider value={{ setAuth, logout, login, getUserInformation }}>
       {children}
     </Provider>
   )

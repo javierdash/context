@@ -1,45 +1,57 @@
-import {createContext, useContext, useReducer} from "react"
-import { SET_AUTH, LOGOUT } from "../actions/auth"
-import { authReducer, initialState } from "../reducers/auth"
-import jwt_decode from "jwt-decode"
+import { createContext, useContext, useReducer } from "react";
+import jwt_decode from "jwt-decode";
+import { LOGOUT, SET_AUTH } from "../actions/auth";
+import { authReducer, initialState } from "../reducers/auth";
+//import { API } from "../api";
 
-//definiendo el contexto
-export const AuthContext = createContext()
-//Provider => para que el context se pueda usar en todos los componentes
-const {Provider} = AuthContext;
+export const AuthContext = createContext();
+const { Provider } = AuthContext;
 
-export const AuthProvider = ({children}) => {
-
-  const [state, dispatch] = useReducer(authReducer, initialState)
+export const AuthProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(authReducer, initialState);
 
   const logout = () => {
-    dispatch({ type: LOGOUT })
-  }
+    dispatch({ type: LOGOUT });
+    localStorage.removeItem("auth");
+    window.location.href = "/login";
+  };
 
-  const getUserInformation = () => {
-    { name: jwt_decode(state.jwt.name)}
-  }
+  const isLoggedIn = () => {
+    if (localStorage.getItem("auth")) return true;
+    return false;
+  };
 
-  const login = ({username, password}) => {
-    //PETICION HHTTP axios.post el server responde un token
+  const getUserInformation = () => jwt_decode(state.jwt);
+  console.log(getUserInformation())
+
+  const login = ({ username, password }) => {
     if(username === "admin" && password === "12345") {
       const {jwt} = {
         jwt: "ejfjirttigjldghrtl"
       }
-      setAuth({ jwt })
-      return jwt
+      setAuth({ jwt });
+      //localStorage.setItem("auth", jwt);
+      return jwt;
     } else {
-    return null;
+      return null;
     }
-  }
+  };
 
   const setAuth = ({ jwt }) => {
-    dispatch({ type: SET_AUTH, payload: { jwt } })
-  }
+    dispatch({ type: SET_AUTH, payload: { jwt } });
+  };
 
   return (
-    <Provider value={{ setAuth, logout, login, getUserInformation }}>
+    <Provider
+      value={{ setAuth, logout, login, getUserInformation, isLoggedIn }}
+    >
       {children}
     </Provider>
-  )
-}
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be wrapped witn AuthProvider");
+  return context;
+};
